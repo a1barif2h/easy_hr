@@ -6,6 +6,7 @@ const fs = require("fs");
 const router = express.Router();
 
 const { Employee } = require("../models");
+const sendMail = require('../utils/sendEmail')
 
 const upload = multer({ dest: "tmp/csv/" });
 
@@ -40,7 +41,7 @@ router.post("/upload-csv", upload.single("file"), async (req, res) => {
       })
       .on("end", async () => {
         fs.unlinkSync(req.file.path);
-        
+
         if (fileRows.length > 0) {
           if (
             /first/.test(fileRows[0][0]) ||
@@ -129,5 +130,22 @@ router.delete("/delete/:uuid", async (req, res) => {
     return res.status(204).json({ error: "Something went wrong!", err: error });
   }
 });
+
+//SEND MAIL TO EMPLOYEES
+router.post('/send-email', async (req, res) => {
+    const {
+        body: {
+            subject,
+            mailList,
+            message
+        }
+    } = req
+    try {
+        await sendMail(subject, mailList, message, res)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({error: 'Something went wrong!', err: error})
+    }
+})
 
 module.exports = router;
