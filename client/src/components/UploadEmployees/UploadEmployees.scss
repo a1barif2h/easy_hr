@@ -1,0 +1,13 @@
+.table_row_success {
+  background-color: #b0efb063;
+  color: #000;
+}
+
+.table_row_error {
+  background-color: #e09b9b78;
+  color: #000;
+  &:hover {
+    background-color: lightcoral;
+    color: black;
+  }
+}
