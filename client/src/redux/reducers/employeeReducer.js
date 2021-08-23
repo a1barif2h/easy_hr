@@ -1,4 +1,4 @@
-import { ERROR, GET_ALL_EMPLOYEES, LOADING } from "../types";
+import { DELETE_EMPLOYEE, ERROR, GET_ALL_EMPLOYEES, HIDE_ERROR, LOADING } from "../types";
 
 const initialState = {
     loading: false,
@@ -14,6 +14,20 @@ const employeeReducer = (state = initialState, action) => {
                 loading: false,
                 error: null,
                 allEmployees: action.payload
+            }
+
+        case DELETE_EMPLOYEE:
+            return {
+                ...state,
+                loading: false,
+                error: null
+            }
+
+        case HIDE_ERROR:
+            return {
+                ...state,
+                error: null,
+                loading: false,
             }
 
         case ERROR:

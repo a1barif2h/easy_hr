@@ -1,80 +1,29 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Table } from "antd";
+import { Button, notification, Popconfirm, Table } from "antd";
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { getAllEmployees } from "../../redux/actions/employeesActions";
+import { connect, useDispatch } from "react-redux";
+import { deleteEmployee, getAllEmployees } from "../../redux/actions/employeesActions";
+import { HIDE_ERROR } from '../../redux/types';
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import './Employees.scss';
 
-function confirm(e) {
-  console.log(e);
-  // message.success('Click on Yes');
-}
-
-function cancel(e) {
-  console.log(e);
-  // message.error('Click on No');
-}
-
-const columns = [
-  {
-    title: 'SN',
-    key: 'sn',
-    dataIndex: 'sn',
-  },
-  {
-    title: 'First Name',
-    key: 'first_name',
-    dataIndex: 'first_name',
-  },
-  {
-    title: 'Last Name',
-    key: 'last_name',
-    dataIndex: 'last_name',
-  },
-  {
-    title: 'Email',
-    key: 'email',
-    dataIndex: 'email',
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (row) => {
-      console.log(row)
-      return (
-        <div className='table_icon_container'>
-          <span className='edit_icon'><EditOutlined /></span>
-          <Popconfirm
-            title="Are you sure to delete this employee?"
-            onConfirm={confirm}
-            onCancel={cancel}
-            okText="Yes"
-            cancelText="No"
-          >
-            <span className='delete_icon'><DeleteOutlined /></span>
-          </Popconfirm>
-        </div>
-      )
-    }
-  }
-];
 
 
-const Employees = ({ data: { employee: {loading, allEmployees} }, getAllEmployees }) => {
-  // console.log(allEmployees);
+
+const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllEmployees, deleteEmployee }) => {
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [employeeList, setEmployeeList] = useState([])
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     getAllEmployees();
   }, [getAllEmployees]);
 
-  console.log(employeeList)
 
   useEffect(() => {
-    if(!loading && allEmployees.length > 0) {
+    if(!loading) {
       const data = []
       for(let i = 0; i < allEmployees.length; i++) {
         const element = allEmployees[i]
@@ -90,9 +39,69 @@ const Employees = ({ data: { employee: {loading, allEmployees} }, getAllEmployee
     }
   }, [loading, allEmployees])
 
+  useEffect(() => {
+    if(error) {
+      dispatch({
+        type: HIDE_ERROR
+      })
+      return notification.error({message: 'Something went wrong!'})
+    }
+  }, [error, dispatch])
+
+  const confirm = employeeId => {
+    deleteEmployee(employeeId)
+  }
+  
+  const cancel = (e) => {
+    // console.log(e);
+  }
+  
+  const columns = [
+    {
+      title: 'SN',
+      key: 'sn',
+      dataIndex: 'sn',
+    },
+    {
+      title: 'First Name',
+      key: 'first_name',
+      dataIndex: 'first_name',
+    },
+    {
+      title: 'Last Name',
+      key: 'last_name',
+      dataIndex: 'last_name',
+    },
+    {
+      title: 'Email',
+      key: 'email',
+      dataIndex: 'email',
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (row) => {
+        // console.log(row)
+        return (
+          <div className='table_icon_container'>
+            <span className='edit_icon'><EditOutlined /></span>
+            <Popconfirm
+              title="Are you sure to delete this employee?"
+              onConfirm={() => confirm(row.key)}
+              onCancel={cancel}
+              okText="Yes"
+              cancelText="No"
+            >
+              <span className='delete_icon'><DeleteOutlined /></span>
+            </Popconfirm>
+          </div>
+        )
+      }
+    }
+  ];
+
   const onSelectChange = selectedRowKeys => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
-    // this.setState({ selectedRowKeys });
     setSelectedRowKeys(selectedRowKeys)
   };
 
@@ -167,6 +176,7 @@ const mapStatToProps = (state) => ({
 
 const mapActionToProps = {
   getAllEmployees,
+  deleteEmployee
 };
 
 export default connect(mapStatToProps, mapActionToProps)(Employees);
