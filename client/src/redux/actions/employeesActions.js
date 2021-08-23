@@ -125,7 +125,7 @@ export const addEmployee = (first_name, last_name, email) => async dispatch => {
             dispatch({
                 type: DELETE_EMPLOYEE
             })
-            return notification.success({message: 'Employee Create successful'})
+            return notification.success({message: 'Employee Create successfully'})
         } else {
             return notification.error({message: 'Something went wrong'})
         }
