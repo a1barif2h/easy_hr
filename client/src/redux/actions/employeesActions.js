@@ -122,6 +122,9 @@ export const addEmployee = (first_name, last_name, email) => async dispatch => {
         })
 
         if(data.uuid) {
+            dispatch({
+                type: DELETE_EMPLOYEE
+            })
             return notification.success({message: 'Employee Create successful'})
         } else {
             return notification.error({message: 'Something went wrong'})

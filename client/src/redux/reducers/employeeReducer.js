@@ -24,7 +24,8 @@ const employeeReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                error: null
+                error: null,
+                isUpdateEmploy: false,
             }
 
         case MAIL_SENDING: 
