@@ -16,10 +16,38 @@
 ## Used Tech.Tools
 
 1. Server
+
    - NodeJs
    - ExpressJs
-   - SQL/MySql(Database)
+   - SQL/MySql (Database)
    - Sequelize
    - googleapis
    - nodemailer
    - fast-csv
+
+2. Client
+   - ReactJs
+   - Redux
+   - Ant design (React UI library)
+   - SASS
+   - axios
+
+## A simple introduction to starting this app
+
+1. Clone this app.
+2. In the server folder, you must add a .env file. And add these environment variables in your .env file.
+   - DB_USERNAME=#### <= PUT YOUR DATABASE USER NAME
+   - DB_PASSWORD=#### <= PUT YOUR DATABASE PASSWORD
+   - DB_DATABASE=#### <= PUT YOUR DATABASE NAME
+   - DB_HOST=###### <= PUT YOUR HOST NAME
+   - PORT=##### <= PUT YOUR PORT NUMBER
+   - CLIENT_ID=#####.apps.googleusercontent.com <= PUT YOUR GOOGLE API CLIENT ID
+   - CLIENT_SECRET=######## <= PUT YOUR GOOGLE API CLIENT SECRET
+   - REFRESH_TOKEN=###### <= AND GOOGLE API REFRESH TOKEN
+3. After adding the .env file you are available to start the server.
+
+### And you are ready to use this app.
+
+## Please give a GitHub star if you like this project.
+
+# Thanks
