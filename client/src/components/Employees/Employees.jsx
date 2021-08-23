@@ -1,10 +1,11 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, notification, Popconfirm, Table } from "antd";
+import { DeleteOutlined, EditOutlined, MailOutlined } from '@ant-design/icons';
+import { Button, Drawer, notification, Popconfirm, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { deleteEmployee, getAllEmployees } from "../../redux/actions/employeesActions";
 import { HIDE_ERROR } from '../../redux/types';
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
+import SendMailForm from '../SendMailForm/SendMailForm';
 import './Employees.scss';
 
 
@@ -14,6 +15,8 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [employeeList, setEmployeeList] = useState([])
+  const [mailListForSend, setMailListForSend] = useState(null)
+  const [isSendMail, setIsSendMail] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -48,6 +51,19 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
     }
   }, [error, dispatch])
 
+  const handleSendMail = () => {
+    const mailList = []
+    employeeList.forEach(employee => {
+      for(let i = 0; i < selectedRowKeys.length; i++){
+        if(selectedRowKeys[i] === employee.key){
+          mailList.push(employee.email)
+        }
+      }
+    })
+    setMailListForSend(mailList)
+    setIsSendMail(true)
+  }
+
   const confirm = employeeId => {
     deleteEmployee(employeeId)
   }
@@ -81,7 +97,6 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
       title: 'Action',
       key: 'action',
       render: (row) => {
-        // console.log(row)
         return (
           <div className='table_icon_container'>
             <span className='edit_icon'><EditOutlined /></span>
@@ -101,7 +116,6 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
   ];
 
   const onSelectChange = selectedRowKeys => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
     setSelectedRowKeys(selectedRowKeys)
   };
 
@@ -153,7 +167,14 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
         <div />
         <div className='employee_content'>
           <p>All Employees List</p>
-          <Button className='send_mail_btn' size='small' disabled>Send Mail</Button>
+          <Button 
+            className='send_mail_btn' 
+            size='small' 
+            disabled={selectedRowKeys.length < 1}
+            onClick={handleSendMail}
+          >
+            <MailOutlined />Send Mail
+          </Button>
         </div>
         <div />
       </div>
@@ -166,6 +187,19 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
         bordered
       />
       </div>
+      <Drawer
+        title="Send Mail"
+        placement="right"
+        closable
+        onClose={() => setIsSendMail(false)}
+        visible={isSendMail}
+        width='50%'
+      >
+        <SendMailForm 
+          mailList={mailListForSend} 
+          setIsSendMail={setIsSendMail}
+        />
+      </Drawer>
     </>
   );
 };

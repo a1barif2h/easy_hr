@@ -44,7 +44,6 @@ const sendMail = async (subject, mailList, message, res) => {
 
 const getHtmlMessage = (message) => {
     return `
-        <h5>Hi, </h5>
         <p>${message}</p>
     `
 }

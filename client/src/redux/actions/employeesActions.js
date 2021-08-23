@@ -1,6 +1,6 @@
 import { notification } from "antd";
 import axios from "axios";
-import { DELETE_EMPLOYEE, ERROR, GET_ALL_EMPLOYEES, LOADING } from "../types";
+import { DELETE_EMPLOYEE, ERROR, GET_ALL_EMPLOYEES, LOADING, MAIL_SENDING, MAIL_SEND_SUCCESS } from "../types";
 
 export const getAllEmployees = () => async dispatch => {
     dispatch({
@@ -46,5 +46,33 @@ export const deleteEmployee = (employeeId) => async dispatch => {
             payload: error
         })
     }
-    console.log(employeeId)
+}
+
+export const sendEmail = (subject, mailList, message) => async dispatch => {
+    dispatch({
+        type: MAIL_SENDING
+    })
+
+    try {
+        const {data} = await axios.post('/employees/send-email', {
+            subject,
+            mailList,
+            message
+        })
+        if(data.success) {
+            dispatch({
+                type: MAIL_SEND_SUCCESS,
+                payload: data.success
+            })
+
+            return notification.success({message: data.success})
+        } else {
+            return notification.error({message: data.error})
+        }
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: error
+        })
+    }
 }

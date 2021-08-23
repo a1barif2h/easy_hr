@@ -1,12 +1,15 @@
-import { DELETE_EMPLOYEE, ERROR, GET_ALL_EMPLOYEES, HIDE_ERROR, LOADING } from "../types";
+import { DELETE_EMPLOYEE, ERROR, GET_ALL_EMPLOYEES, HIDE_ERROR, HIDE_SUCCESS_MESSAGE, LOADING, MAIL_SENDING, MAIL_SEND_SUCCESS } from "../types";
 
 const initialState = {
     loading: false,
     error: null,
-    allEmployees: []
+    mailSending: false,
+    allEmployees: [],
+    successMessage: ''
 }
 
 const employeeReducer = (state = initialState, action) => {
+    console.log(action)
     switch (action.type) {
         case GET_ALL_EMPLOYEES:
             return {
@@ -21,6 +24,25 @@ const employeeReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 error: null
+            }
+
+        case MAIL_SENDING: 
+        return {
+            ...state,
+            mailSending: true
+        }
+
+        case MAIL_SEND_SUCCESS:
+            return {
+                ...state,
+                mailSending: false,
+                successMessage: action.payload
+            }
+
+        case HIDE_SUCCESS_MESSAGE:
+            return {
+                ...state,
+                successMessage: ''
             }
 
         case HIDE_ERROR:
