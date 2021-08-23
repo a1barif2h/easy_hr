@@ -1,33 +1,31 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { getAllEmployees } from '../redux/actions/employeesActions';
+import { Layout } from "antd";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { getAllEmployees } from "../redux/actions/employeesActions";
+import './employees.scss';
 
-const Employee = ({
-    data: {
-        employee
-    } ,
-    getAllEmployees
-}) => {
+const { Header, Content, Footer } = Layout;
 
-    console.log(employee)
+const Employee = ({ data: { employee }, getAllEmployees }) => {
+  console.log(employee);
 
-    useEffect(() => {
-        getAllEmployees()
-    },[getAllEmployees])
+  useEffect(() => {
+    getAllEmployees();
+  }, [getAllEmployees]);
 
-    return (
-        <div>
-            <h1>Employee</h1>
-        </div>
-    );
+  return (
+    <>
+      <h1>employee page</h1>
+    </>
+  );
 };
 
-const mapStatToProps = state => ({
-    data: state
-})
+const mapStatToProps = (state) => ({
+  data: state,
+});
 
 const mapActionToProps = {
-    getAllEmployees
-}
+  getAllEmployees,
+};
 
 export default connect(mapStatToProps, mapActionToProps)(Employee);

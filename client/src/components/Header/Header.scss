@@ -1,0 +1,13 @@
+.container {
+  width: 100%;
+  box-shadow: 5px 5px 10px #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  .logo_container {
+    img {
+      height: 60px;
+    }
+  }
+}
