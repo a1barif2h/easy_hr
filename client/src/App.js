@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import 'antd/dist/antd.css';
+import axios from 'axios';
+import { Provider } from 'react-redux';
+import Employee from './pages/employee';
+import store from './redux/store';
 
-function App() {
+axios.defaults.baseURL ="http://localhost:5000";
+
+const App = () => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Provider store={store}>
+        <Employee />
+      </Provider>
+    </>
+  )
 }
 
 export default App;
