@@ -108,3 +108,29 @@ export const updateEmployee = (employeeId, first_name, last_name, email) => asyn
         })
     }
 }
+
+export const addEmployee = (first_name, last_name, email) => async dispatch => {
+    dispatch({
+        type: UPDATE_EMPLOYEE
+    })
+
+    try {
+        const {data} = await axios.post(`/employees/add`, {
+            first_name,
+            last_name,
+            email
+        })
+
+        if(data.uuid) {
+            return notification.success({message: 'Employee Create successful'})
+        } else {
+            return notification.error({message: 'Something went wrong'})
+        }
+    } catch (error) {
+        dispatch({
+            type: ERROR,
+            payload: error
+        })
+    }
+
+}

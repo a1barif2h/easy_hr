@@ -1,11 +1,22 @@
-import React from 'react';
+import React from "react";
+import EmployeeForm from "../EmployeeForm/EmployeeForm";
+import './AddEmployee.scss';
 
 const AddEmployee = () => {
-    return (
-        <div>
-            <h1>add employee screen</h1>
+  return (
+    <>
+      <div className="employee_top_container">
+        <div />
+        <div className="employee_content">
+          <p>Add Employee</p>
         </div>
-    );
+        <div />
+      </div>
+      <div className='add_employee_form_container'>
+          <EmployeeForm />
+      </div>
+    </>
+  );
 };
 
 export default AddEmployee;

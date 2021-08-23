@@ -1,14 +1,16 @@
 import { Button, Form, Input, notification } from 'antd';
+import { useForm } from 'antd/lib/form/Form';
 import React, { useEffect } from "react";
 import { connect, useDispatch } from 'react-redux';
-import { updateEmployee } from '../../redux/actions/employeesActions';
+import { addEmployee, updateEmployee } from '../../redux/actions/employeesActions';
 import { HIDE_ERROR } from '../../redux/types';
 
 
 
-const EmployeeForm = ({ employee, updateEmployee, data: {isUpdateEmploy, error, successMessage} }) => {
+const EmployeeForm = ({ employee, updateEmployee, addEmployee, data: {isUpdateEmploy, error, successMessage} }) => {
     // console.log(employee)
     const dispatch = useDispatch()
+    const [form] = useForm()
 
     useEffect(() => {
         if(error) {
@@ -20,7 +22,12 @@ const EmployeeForm = ({ employee, updateEmployee, data: {isUpdateEmploy, error, 
     }, [error, dispatch])
 
     const onFinish = ({first_name, last_name, email}) => {
+      employee ?
         updateEmployee(employee.key, first_name, last_name, email)
+        :
+        addEmployee(first_name, last_name, email)
+
+        !employee && form.resetFields(['first_name', 'last_name', 'email'])
     };
     
     const onFinishFailed = (errorInfo) => {
@@ -31,6 +38,7 @@ const EmployeeForm = ({ employee, updateEmployee, data: {isUpdateEmploy, error, 
     <>
       <Form
       name="employee form"
+      form={form}
       labelCol={{
         span: 8,
       }}
@@ -56,7 +64,7 @@ const EmployeeForm = ({ employee, updateEmployee, data: {isUpdateEmploy, error, 
           },
         ]}
       >
-        <Input />
+        <Input placeholder='Enter first name' />
       </Form.Item>
 
       <Form.Item
@@ -69,7 +77,7 @@ const EmployeeForm = ({ employee, updateEmployee, data: {isUpdateEmploy, error, 
           },
         ]}
       >
-        <Input />
+        <Input placeholder='Enter last name' />
       </Form.Item>
 
       <Form.Item
@@ -83,7 +91,7 @@ const EmployeeForm = ({ employee, updateEmployee, data: {isUpdateEmploy, error, 
           },
         ]}
       >
-        <Input />
+        <Input placeholder='Enter email' />
       </Form.Item>
 
       <Form.Item
@@ -111,7 +119,8 @@ const mapStatToProps = state => ({
 })
 
 const mapActionToProps = {
-    updateEmployee
+    updateEmployee,
+    addEmployee
 }
 
 export default connect(mapStatToProps, mapActionToProps)(EmployeeForm);
