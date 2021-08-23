@@ -1,27 +1,36 @@
-import { DeleteOutlined, EditOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Drawer, notification, Popconfirm, Table } from "antd";
+import { DeleteOutlined, EditOutlined, MailOutlined } from "@ant-design/icons";
+import { Button, Drawer, Input, notification, Popconfirm, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { deleteEmployee, getAllEmployees } from "../../redux/actions/employeesActions";
-import { HIDE_ERROR } from '../../redux/types';
-import EmployeeForm from '../EmployeeForm/EmployeeForm';
+import {
+  deleteEmployee,
+  getAllEmployees
+} from "../../redux/actions/employeesActions";
+import { HIDE_ERROR } from "../../redux/types";
+import EmployeeForm from "../EmployeeForm/EmployeeForm";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
-import SendMailForm from '../SendMailForm/SendMailForm';
-import './Employees.scss';
+import SendMailForm from "../SendMailForm/SendMailForm";
+import "./Employees.scss";
 
+const { Search } = Input;
 
+const Employees = ({
+  data: {
+    employee: { loading, allEmployees, error },
+  },
+  getAllEmployees,
+  deleteEmployee,
+}) => {
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [employeeList, setEmployeeList] = useState([]);
+  const [filterEmployeeList, setFilterEmployeeList] = useState([])
+  const [mailListForSend, setMailListForSend] = useState(null);
+  const [isSendMail, setIsSendMail] = useState(false);
+  const [isUpdateEmployee, setIsUpdateEmployee] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [isFilter, setIsFilter] = useState(false)
 
-
-const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllEmployees, deleteEmployee }) => {
-
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
-  const [employeeList, setEmployeeList] = useState([])
-  const [mailListForSend, setMailListForSend] = useState(null)
-  const [isSendMail, setIsSendMail] = useState(false)
-  const [isUpdateEmployee, setIsUpdateEmployee] = useState(false)
-  const [selectedEmployee, setSelectedEmployee] = useState(null)
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getAllEmployees();
@@ -29,85 +38,90 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
 
 
   useEffect(() => {
-    if(!loading) {
-      const data = []
-      for(let i = 0; i < allEmployees.length; i++) {
-        const element = allEmployees[i]
+    if (!loading) {
+      const data = [];
+      for (let i = 0; i < allEmployees.length; i++) {
+        const element = allEmployees[i];
         data.push({
           key: element.uuid,
           first_name: element.first_name,
           last_name: element.last_name,
           email: element.email,
-          sn: i + 1
-        })
+          sn: i + 1,
+        });
       }
-      setEmployeeList(data)
+      setEmployeeList(data);
     }
-  }, [loading, allEmployees])
+  }, [loading, allEmployees]);
 
   useEffect(() => {
-    if(error) {
+    if (error) {
       dispatch({
-        type: HIDE_ERROR
-      })
-      return notification.error({message: 'Something went wrong!'})
+        type: HIDE_ERROR,
+      });
+      return notification.error({ message: "Something went wrong!" });
     }
-  }, [error, dispatch])
+  }, [error, dispatch]);
 
   const handleSendMail = () => {
-    const mailList = []
-    employeeList.forEach(employee => {
-      for(let i = 0; i < selectedRowKeys.length; i++){
-        if(selectedRowKeys[i] === employee.key){
-          mailList.push(employee.email)
+    const mailList = [];
+    employeeList.forEach((employee) => {
+      for (let i = 0; i < selectedRowKeys.length; i++) {
+        if (selectedRowKeys[i] === employee.key) {
+          mailList.push(employee.email);
         }
       }
-    })
-    setMailListForSend(mailList)
-    setIsSendMail(true)
-  }
+    });
+    setMailListForSend(mailList);
+    setIsSendMail(true);
+  };
 
   const handleUpdateEmployee = (employee) => {
-    setSelectedEmployee(employee)
-    setIsUpdateEmployee(true)
-  }
+    setSelectedEmployee(employee);
+    setIsUpdateEmployee(true);
+  };
 
-  const confirm = employeeId => {
-    deleteEmployee(employeeId)
-  }
-  
+  const confirm = (employeeId) => {
+    deleteEmployee(employeeId);
+  };
+
   const cancel = (e) => {
     // console.log(e);
-  }
-  
+  };
+
   const columns = [
     {
-      title: 'SN',
-      key: 'sn',
-      dataIndex: 'sn',
+      title: "SN",
+      key: "sn",
+      dataIndex: "sn",
     },
     {
-      title: 'First Name',
-      key: 'first_name',
-      dataIndex: 'first_name',
+      title: "First Name",
+      key: "first_name",
+      dataIndex: "first_name",
     },
     {
-      title: 'Last Name',
-      key: 'last_name',
-      dataIndex: 'last_name',
+      title: "Last Name",
+      key: "last_name",
+      dataIndex: "last_name",
     },
     {
-      title: 'Email',
-      key: 'email',
-      dataIndex: 'email',
+      title: "Email",
+      key: "email",
+      dataIndex: "email",
     },
     {
-      title: 'Action',
-      key: 'action',
+      title: "Action",
+      key: "action",
       render: (row) => {
         return (
-          <div className='table_icon_container'>
-            <span className='edit_icon' onClick={() =>handleUpdateEmployee(row)}><EditOutlined /></span>
+          <div className="table_icon_container">
+            <span
+              className="edit_icon"
+              onClick={() => handleUpdateEmployee(row)}
+            >
+              <EditOutlined />
+            </span>
             <Popconfirm
               title="Are you sure to delete this employee?"
               onConfirm={() => confirm(row.key)}
@@ -115,16 +129,18 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
               okText="Yes"
               cancelText="No"
             >
-              <span className='delete_icon'><DeleteOutlined /></span>
+              <span className="delete_icon">
+                <DeleteOutlined />
+              </span>
             </Popconfirm>
           </div>
-        )
-      }
-    }
+        );
+      },
+    },
   ];
 
-  const onSelectChange = selectedRowKeys => {
-    setSelectedRowKeys(selectedRowKeys)
+  const onSelectChange = (selectedRowKeys) => {
+    setSelectedRowKeys(selectedRowKeys);
   };
 
   const rowSelection = {
@@ -135,9 +151,9 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
       Table.SELECTION_INVERT,
       Table.SELECTION_NONE,
       {
-        key: 'odd',
-        text: 'Select Odd Row',
-        onSelect: changableRowKeys => {
+        key: "odd",
+        text: "Select Odd Row",
+        onSelect: (changableRowKeys) => {
           let newSelectedRowKeys = [];
           newSelectedRowKeys = changableRowKeys.filter((key, index) => {
             if (index % 2 !== 0) {
@@ -145,13 +161,13 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
             }
             return true;
           });
-          setSelectedRowKeys(newSelectedRowKeys)
+          setSelectedRowKeys(newSelectedRowKeys);
         },
       },
       {
-        key: 'even',
-        text: 'Select Even Row',
-        onSelect: changableRowKeys => {
+        key: "even",
+        text: "Select Even Row",
+        onSelect: (changableRowKeys) => {
           let newSelectedRowKeys = [];
           newSelectedRowKeys = changableRowKeys.filter((key, index) => {
             if (index % 2 !== 0) {
@@ -159,41 +175,94 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
             }
             return false;
           });
-          setSelectedRowKeys(newSelectedRowKeys)
+          setSelectedRowKeys(newSelectedRowKeys);
         },
       },
     ],
   };
 
-  if(loading) {
-    return <LoadingComponent />
+  const searchFirstName = e => {
+    const filterValue = e.target.value
+    const filteredList = employeeList.filter(employee => employee.first_name.toLowerCase().includes(filterValue.toLowerCase()))
+    setIsFilter(true)
+    setFilterEmployeeList(filteredList)
+  }
+
+  const searchLastName = e => {
+    const filterValue = e.target.value
+    const filteredList = employeeList.filter(employee => employee.last_name.toLowerCase().includes(filterValue.toLowerCase()))
+    setIsFilter(true)
+    setFilterEmployeeList(filteredList)
+  }
+
+  const searchEmail = e => {
+    const filterValue = e.target.value
+    const filteredList = employeeList.filter(employee => employee.email.toLowerCase().includes(filterValue.toLowerCase()))
+    setIsFilter(true)
+    setFilterEmployeeList(filteredList)
+  }
+
+  if (loading) {
+    return <LoadingComponent />;
   }
 
   return (
     <>
-      <div className='employee_top_container'>
+      <div className="employee_top_container">
         <div />
-        <div className='employee_content'>
+        <div className="employee_content">
           <p>All Employees List</p>
-          <Button 
-            className='send_mail_btn' 
-            size='small' 
+          <Button
+            className="send_mail_btn"
+            size="small"
             disabled={selectedRowKeys.length < 1}
             onClick={handleSendMail}
           >
-            <MailOutlined />Send Mail
+            <MailOutlined />
+            Send Mail
           </Button>
         </div>
         <div />
       </div>
-      <div className='table_container'>
-      <Table 
-        rowSelection={rowSelection} 
-        columns={columns} 
-        dataSource={employeeList} 
-        loading={loading} 
-        bordered
-      />
+
+      <div className="search_container">
+        <div className="search_first_name">
+          <span>Firs Name: </span>
+          <Search
+            placeholder="search first name..."
+            onChange={searchFirstName}
+            style={{ width: 200 }}
+            size='small'
+          />
+        </div>
+        <div className="search_last_name">
+          <span>Last Name: </span>
+          <Search
+            placeholder="search last name..."
+            onChange={searchLastName}
+            style={{ width: 200 }}
+            size='small'
+          />
+        </div>
+        <div className="search_email">
+          <span>Email: </span>
+          <Search
+            placeholder="search email..."
+            onChange={searchEmail}
+            style={{ width: 200 }}
+            size='small'
+          />
+        </div>
+      </div>
+
+      <div className="table_container">
+        <Table
+          rowSelection={rowSelection}
+          columns={columns}
+          dataSource={isFilter ? filterEmployeeList : employeeList}
+          loading={loading}
+          bordered
+        />
       </div>
       <Drawer
         title="Send Mail"
@@ -201,10 +270,10 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
         closable
         onClose={() => setIsSendMail(false)}
         visible={isSendMail}
-        width='50%'
+        width="50%"
       >
-        <SendMailForm 
-          mailList={mailListForSend} 
+        <SendMailForm
+          mailList={mailListForSend}
           setIsSendMail={setIsSendMail}
         />
       </Drawer>
@@ -214,7 +283,7 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
         closable
         onClose={() => setIsUpdateEmployee(false)}
         visible={isUpdateEmployee}
-        width='50%'
+        width="50%"
         destroyOnClose
       >
         <EmployeeForm employee={selectedEmployee} />
@@ -229,7 +298,7 @@ const mapStatToProps = (state) => ({
 
 const mapActionToProps = {
   getAllEmployees,
-  deleteEmployee
+  deleteEmployee,
 };
 
 export default connect(mapStatToProps, mapActionToProps)(Employees);

@@ -87,7 +87,7 @@ const UploadEmployees = () => {
       if (errorEmployees.length > 0) {
         errorEmployees.forEach((se, index) => {
           tempSummaryData.push({
-            key: index + 1,
+            key: tempSummaryData.length + 10,
             first_name: se.first_name,
             last_name: se.last_name,
             email: se.email,
@@ -164,7 +164,6 @@ const UploadEmployees = () => {
         onClose={() => setIsSummaryReport(false)}
         visible={isSummaryReport}
         width="70%"
-        // destroyOnClose
       >
         <Table
           rowClassName={(record) =>
