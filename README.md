@@ -16,10 +16,10 @@
 ## Used Tech.Tools
 
 1. Server
-   .._ NodeJs
-   .._ ExpressJs
-   .._ SQL/MySql(Database)
-   .._ Sequelize
-   .._ googleapis
-   .._ nodemailer
-   ..\* fast-csv
+   - NodeJs
+   - ExpressJs
+   - SQL/MySql(Database)
+   - Sequelize
+   - googleapis
+   - nodemailer
+   - fast-csv
