@@ -1,0 +1,54 @@
+.employee_top_container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 0 10px #ddd;
+  width: 85%;
+  margin: 30px auto;
+  border-radius: 5px;
+  padding: 5px 0;
+
+  .employee_content {
+    display: flex;
+    justify-items: center;
+
+    p {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .send_mail_btn {
+      margin-left: 25px;
+      width: 120px;
+      border-radius: 5px;
+    }
+  }
+}
+
+.table_container {
+  width: 80%;
+  margin: 0 auto;
+
+  .table_icon_container {
+    font-size: 16px;
+
+    .edit_icon {
+      color: #2495ff;
+      cursor: pointer;
+    }
+
+    .delete_icon {
+      margin: 0 10px;
+      color: rgb(194, 3, 3);
+      cursor: pointer;
+    }
+  }
+
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td,
+  .ant-table tfoot > tr > th,
+  .ant-table tfoot > tr > td {
+    padding: 8px 16px;
+  }
+}

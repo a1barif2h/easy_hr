@@ -3,9 +3,9 @@ import axios from "axios";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AddEmployee from "./components/AddEmployee/AddEmployee";
+import Employees from "./components/Employees/Employees";
 import Header from "./components/Header/Header";
 import UploadEmployees from "./components/UploadEmployees/UploadEmployees";
-import Employee from "./pages/employee";
 import store from "./redux/store";
 
 axios.defaults.baseURL = "http://localhost:5000";
@@ -18,7 +18,7 @@ const App = () => {
           <Header />
           <Switch>
             <Route exact path="/">
-              <Employee />
+              <Employees />
             </Route>
             <Route exact path="/add-employee">
               <AddEmployee />
