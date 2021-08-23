@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { deleteEmployee, getAllEmployees } from "../../redux/actions/employeesActions";
 import { HIDE_ERROR } from '../../redux/types';
+import EmployeeForm from '../EmployeeForm/EmployeeForm';
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import SendMailForm from '../SendMailForm/SendMailForm';
 import './Employees.scss';
@@ -17,6 +18,8 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
   const [employeeList, setEmployeeList] = useState([])
   const [mailListForSend, setMailListForSend] = useState(null)
   const [isSendMail, setIsSendMail] = useState(false)
+  const [isUpdateEmployee, setIsUpdateEmployee] = useState(false)
+  const [selectedEmployee, setSelectedEmployee] = useState(null)
 
   const dispatch = useDispatch()
 
@@ -64,6 +67,11 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
     setIsSendMail(true)
   }
 
+  const handleUpdateEmployee = (employee) => {
+    setSelectedEmployee(employee)
+    setIsUpdateEmployee(true)
+  }
+
   const confirm = employeeId => {
     deleteEmployee(employeeId)
   }
@@ -99,7 +107,7 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
       render: (row) => {
         return (
           <div className='table_icon_container'>
-            <span className='edit_icon'><EditOutlined /></span>
+            <span className='edit_icon' onClick={() =>handleUpdateEmployee(row)}><EditOutlined /></span>
             <Popconfirm
               title="Are you sure to delete this employee?"
               onConfirm={() => confirm(row.key)}
@@ -199,6 +207,17 @@ const Employees = ({ data: { employee: {loading, allEmployees, error} }, getAllE
           mailList={mailListForSend} 
           setIsSendMail={setIsSendMail}
         />
+      </Drawer>
+      <Drawer
+        title="Update Employ"
+        placement="right"
+        closable
+        onClose={() => setIsUpdateEmployee(false)}
+        visible={isUpdateEmployee}
+        width='50%'
+        destroyOnClose
+      >
+        <EmployeeForm employee={selectedEmployee} />
       </Drawer>
     </>
   );

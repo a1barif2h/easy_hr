@@ -82,7 +82,7 @@ const SendMailForm = (props) => {
             },
           ]}
         >
-          <Input.TextArea />
+          <Input.TextArea placeholder='Enter email subject' />
         </Form.Item>
 
         <Form.Item
@@ -95,7 +95,7 @@ const SendMailForm = (props) => {
             },
           ]}
         >
-          <Input.TextArea />
+          <Input.TextArea placeholder='Enter email message' />
         </Form.Item>
 
         <Form.Item
