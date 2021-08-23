@@ -12,3 +12,14 @@
 6. Users can delete employees.
 7. Users can search employee by first name, last name, and email.
 8. Users can send emails to one or more employees at a time from the application.
+
+## Used Tech.Tools
+
+1. Server
+   .._ NodeJs
+   .._ ExpressJs
+   .._ SQL/MySql(Database)
+   .._ Sequelize
+   .._ googleapis
+   .._ nodemailer
+   ..\* fast-csv
